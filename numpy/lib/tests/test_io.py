@@ -169,7 +169,7 @@ class RoundtripTest:
 
     @pytest.mark.slow
     def test_format_2_0(self):
-        dt = [(("%d" % i) * 100, float) for i in range(500)]
+        dt = [((f"{i}") * 100, float) for i in range(500)]
         a = np.ones(1000, dtype=dt)
         with warnings.catch_warnings(record=True):
             warnings.filterwarnings('always', '', UserWarning)
@@ -189,7 +189,7 @@ class TestSavezLoad(RoundtripTest):
         RoundtripTest.roundtrip(self, np.savez, *args, **kwargs)
         try:
             for n, arr in enumerate(self.arr):
-                reloaded = self.arr_reloaded['arr_%d' % n]
+                reloaded = self.arr_reloaded[f'arr_{n}']
                 assert_equal(arr, reloaded)
                 assert_equal(arr.dtype, reloaded.dtype)
                 assert_equal(arr.flags.fnc, reloaded.flags.fnc)
@@ -299,7 +299,7 @@ class TestSavezLoad(RoundtripTest):
                     try:
                         np.load(tmp)["data"]
                     except Exception as e:
-                        msg = "Failed to load data from a file: %s" % e
+                        msg = f"Failed to load data from a file: {e}"
                         raise AssertionError(msg)
 
     def test_closing_zipfile_after_load(self):
